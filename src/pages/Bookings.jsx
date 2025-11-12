@@ -257,11 +257,11 @@ const Bookings = () => {
                               {cancellationInfo.reason}
                             </p>
                           )}
-                          {cancellationInfo.refundText && (
+                          {/* {cancellationInfo.refundText && (
                             <p className="text-red-700 text-sm">
                               {cancellationInfo.refundText}
                             </p>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>

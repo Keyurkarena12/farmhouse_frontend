@@ -67,7 +67,7 @@ const Home = () => {
                       value={searchParams.city}
                       onChange={handleInputChange}
                       placeholder="Enter city or location"
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -77,13 +77,13 @@ const Home = () => {
                     Check-in
                   </label>
                   <div className="relative">
-                    <FaCalendarAlt className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <FaCalendarAlt className="absolute left-2 top-4 h-4 w-4 text-gray-400" />
                     <input
                       type="date"
                       name="checkIn"
                       value={searchParams.checkIn}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full pl-6 pr-2 py-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -93,13 +93,13 @@ const Home = () => {
                     Check-out
                   </label>
                   <div className="relative">
-                    <FaCalendarAlt className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    <FaCalendarAlt className="absolute left-2 top-4 h-4 w-4 text-gray-400" />
                     <input
                       type="date"
                       name="checkOut"
                       value={searchParams.checkOut}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full pl-6 pr-2 py-3 border border-gray-300 rounded-lg text-black focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     />
                   </div>
                 </div>
@@ -114,7 +114,7 @@ const Home = () => {
                       name="guests"
                       value={searchParams.guests}
                       onChange={handleInputChange}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 text-black focus:ring-green-500 focus:border-transparent"
                     >
                       {[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25].map(num => (
                         <option key={num} value={num}>{num} Guest{num > 1 ? 's' : ''}</option>

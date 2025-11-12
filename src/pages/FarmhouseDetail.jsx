@@ -18,6 +18,8 @@
 //   FaRegStar,
 //   FaChevronLeft,
 //   FaChevronRight,
+//   FaTimes,
+//   FaEdit,
 // } from "react-icons/fa";
 
 // // Rating Modal Component
@@ -316,6 +318,101 @@
 //   );
 // };
 
+// // Room Selection Modal Component
+// const RoomSelectionModal = ({ 
+//   rooms, 
+//   isOpen, 
+//   onClose, 
+//   onSelectRoom, 
+//   selectedRoomType 
+// }) => {
+//   const [tempSelectedRoom, setTempSelectedRoom] = useState(selectedRoomType);
+
+//   const handleConfirmSelection = () => {
+//     onSelectRoom(tempSelectedRoom);
+//     onClose();
+//   };
+
+//   const handleClose = () => {
+//     setTempSelectedRoom(selectedRoomType); // Reset to original selection
+//     onClose();
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+//       <div className="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+//         <div className="flex justify-between items-center mb-6">
+//           <h3 className="text-xl font-bold text-gray-900">Select Room Type</h3>
+//           <button
+//             onClick={handleClose}
+//             className="text-gray-400 hover:text-gray-600 transition-colors"
+//           >
+//             <FaTimes className="h-6 w-6" />
+//           </button>
+//         </div>
+
+//         <div className="space-y-4">
+//           {rooms.map((room, index) => (
+//             <div
+//               key={index}
+//               onClick={() => setTempSelectedRoom(room.type)}
+//               className={`border rounded-lg p-4 cursor-pointer transition-all ${
+//                 tempSelectedRoom === room.type
+//                   ? "border-green-500 bg-green-50 ring-2 ring-green-200"
+//                   : "border-gray-200 hover:border-green-300"
+//               }`}
+//             >
+//               <div className="flex justify-between items-start">
+//                 <div className="flex-1">
+//                   <div className="flex items-center space-x-2 mb-2">
+//                     <h3 className="text-lg font-semibold text-gray-900">
+//                       {room.name}
+//                     </h3>
+//                     {tempSelectedRoom === room.type && (
+//                       <FaCheckCircle className="h-5 w-5 text-green-500" />
+//                     )}
+//                   </div>
+//                   <p className="text-gray-600 mb-1">
+//                     Capacity: {room.capacity} guests
+//                   </p>
+//                   <p className="text-sm text-gray-500">Type: {room.type}</p>
+//                   {room.description && (
+//                     <p className="text-gray-700 mt-2 text-sm">{room.description}</p>
+//                   )}
+//                 </div>
+//                 <div className="text-right ml-4">
+//                   <div className="text-2xl font-bold text-green-600">
+//                     ₹{room.pricePerNight?.toLocaleString()}
+//                   </div>
+//                   <div className="text-sm text-gray-500">per night</div>
+//                 </div>
+//               </div>
+//             </div>
+//           ))}
+//         </div>
+
+//         <div className="flex justify-end space-x-3 mt-6 pt-4 border-t border-gray-200">
+//           <button
+//             onClick={handleClose}
+//             className="px-4 py-2 text-gray-600 hover:text-gray-800 font-medium border border-gray-300 rounded-lg transition-colors"
+//           >
+//             Cancel
+//           </button>
+//           <button
+//             onClick={handleConfirmSelection}
+//             disabled={!tempSelectedRoom}
+//             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
+//           >
+//             Confirm Selection
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
 // const FarmhouseDetail = () => {
 //   const { id } = useParams();
 //   const dispatch = useDispatch();
@@ -329,6 +426,7 @@
 //   const [specialRequests, setSpecialRequests] = useState("");
 //   const [message, setMessage] = useState("");
 //   const [showRatingModal, setShowRatingModal] = useState(false);
+//   const [showRoomModal, setShowRoomModal] = useState(false);
 //   const [selectedBooking, setSelectedBooking] = useState(null);
 //   const [userCompletedBookings, setUserCompletedBookings] = useState([]);
 //   const [blockedDates, setBlockedDates] = useState([]);
@@ -349,7 +447,6 @@
 //       fetchBlockedDates();
 //     }
 //   }, [id]);
-
 
 //   // 📦 Fetch farmhouse by ID
 //   useEffect(() => {
@@ -388,13 +485,19 @@
 //     { name: "Family Suite", type: "suite", capacity: 6, pricePerNight: 6000 },
 //   ];
 
-//   // ✅ NEW: Check if a date is blocked
+//   // ✅ Check if a date is blocked
 //   const isDateBlocked = (date) => {
 //     return blockedDates.some(blockedDate => {
 //       const blocked = new Date(blockedDate);
 //       const checkDate = new Date(date);
 //       return blocked.toDateString() === checkDate.toDateString();
 //     });
+//   };
+
+//   // 🎯 Handle room selection from modal
+//   const handleRoomSelect = (selectedRoomType) => {
+//     setRoomType(selectedRoomType);
+//     console.log('Selected room:', selectedRoomType);
 //   };
 
 //   // 🧾 Booking Submission
@@ -409,7 +512,7 @@
 //       return;
 //     }
 
-//     // ✅ NEW: Check for blocked dates
+//     // ✅ Check for blocked dates
 //     const checkInDate = new Date(checkIn);
 //     const checkOutDate = new Date(checkOut);
 //     const datesInRange = [];
@@ -426,7 +529,6 @@
 //       return;
 //     }
 
-
 //     const bookingData = {
 //       farmhouseId: id,
 //       roomType,
@@ -441,7 +543,7 @@
 //       },
 //     };
 
-//     console.log('Sending booking data:', bookingData); // Debug log
+//     console.log('Sending booking data:', bookingData);
 
 //     try {
 //       await dispatch(createBooking(bookingData)).unwrap();
@@ -453,7 +555,7 @@
 //       setRoomType("");
 //       setSpecialRequests("");
 //     } catch (err) {
-//       console.error('Booking error:', err); // Debug log
+//       console.error('Booking error:', err);
 //       setMessage(`❌ ${err}`);
 //     }
 //   };
@@ -508,6 +610,9 @@
 //     ? currentFarmhouse.rooms
 //     : defaultRooms;
 
+//   // ✅ MOVED: Get selected room details - now placed AFTER rooms is defined
+//   const selectedRoom = rooms.find(room => room.type === roomType);
+
 //   return (
 //     <div className="min-h-screen bg-gray-50">
 //       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -542,7 +647,7 @@
 //               </p>
 //             </div>
 
-//             {/* User's Completed Bookings Section - Only show if user has completed bookings */}
+//             {/* User's Completed Bookings Section */}
 //             {userCompletedBookings.length > 0 && (
 //               <div className="bg-white p-6 rounded-lg shadow-sm">
 //                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -610,19 +715,51 @@
 
 //             {/* Rooms */}
 //             <div className="bg-white p-6 rounded-lg shadow-sm">
-//               <h2 className="text-2xl font-bold text-gray-900 mb-4">Available Rooms</h2>
+//               <div className="flex justify-between items-center mb-4">
+//                 <h2 className="text-2xl font-bold text-gray-900">Available Rooms</h2>
+//                 <button
+//                   onClick={() => setShowRoomModal(true)}
+//                   className="flex items-center space-x-2 text-green-600 hover:text-green-700 font-medium"
+//                 >
+//                   <FaEdit className="h-4 w-4" />
+//                   <span>Change Room</span>
+//                 </button>
+//               </div>
+              
+//               {roomType ? (
+//                 <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+//                   <div className="flex justify-between items-center">
+//                     <div>
+//                       <h3 className="text-lg font-semibold text-green-800">
+//                         Selected Room: {selectedRoom?.name}
+//                       </h3>
+//                       <p className="text-green-600">
+//                         Capacity: {selectedRoom?.capacity} guests • 
+//                         ₹{selectedRoom?.pricePerNight?.toLocaleString()} per night
+//                       </p>
+//                     </div>
+//                     <button
+//                       onClick={() => setShowRoomModal(true)}
+//                       className="text-green-600 hover:text-green-800 font-medium"
+//                     >
+//                       Change
+//                     </button>
+//                   </div>
+//                 </div>
+//               ) : (
+//                 <p className="text-gray-600 mb-4">Please select a room type to continue with booking.</p>
+//               )}
+
 //               <div className="space-y-4">
 //                 {rooms.map((room, index) => (
 //                   <div
 //                     key={index}
-//                     onClick={() => {
-//                       console.log('Selected room:', room.type); // Debug log
-//                       setRoomType(room.type);
-//                     }}
-//                     className={`border rounded-lg p-4 cursor-pointer transition ${roomType === room.type
-//                       ? "border-green-500 bg-green-50"
-//                       : "border-gray-200"
-//                       }`}
+//                     onClick={() => setRoomType(room.type)}
+//                     className={`border rounded-lg p-4 cursor-pointer transition ${
+//                       roomType === room.type
+//                         ? "border-green-500 bg-green-50"
+//                         : "border-gray-200 hover:border-green-300"
+//                     }`}
 //                   >
 //                     <div className="flex justify-between items-start">
 //                       <div>
@@ -630,11 +767,11 @@
 //                         <p className="text-gray-600">
 //                           Capacity: {room.capacity} guests
 //                         </p>
-//                         <p className="text-sm text-gray-500">Type: {room.type}</p> {/* Show room type */}
+//                         <p className="text-sm text-gray-500">Type: {room.type}</p>
 //                       </div>
 //                       <div className="text-right">
 //                         <div className="text-2xl font-bold text-green-600">
-//                           ₹{room.pricePerNight}
+//                           ₹{room.pricePerNight?.toLocaleString()}
 //                         </div>
 //                         <div className="text-sm text-gray-500">per night</div>
 //                       </div>
@@ -649,12 +786,38 @@
 //           <div className="bg-white p-6 rounded-lg shadow-sm h-fit sticky top-8">
 //             <div className="text-center mb-6">
 //               <div className="text-3xl font-bold text-green-600">
-//                 ₹{currentFarmhouse.pricing?.basePrice || 2500}
+//                 {selectedRoom ? (
+//                   <>₹{selectedRoom.pricePerNight?.toLocaleString()}</>
+//                 ) : (
+//                   <>₹{currentFarmhouse.pricing?.basePrice || 2500}</>
+//                 )}
 //               </div>
 //               <div className="text-gray-500">per night</div>
 //             </div>
 
 //             <div className="space-y-4">
+//               {/* Selected Room Display */}
+//               {roomType && (
+//                 <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+//                   <div className="flex justify-between items-center">
+//                     <div>
+//                       <p className="font-semibold text-green-800 text-sm">
+//                         {selectedRoom?.name}
+//                       </p>
+//                       <p className="text-green-600 text-xs">
+//                         {selectedRoom?.capacity} guests
+//                       </p>
+//                     </div>
+//                     <button
+//                       onClick={() => setShowRoomModal(true)}
+//                       className="text-green-600 hover:text-green-800 text-sm font-medium"
+//                     >
+//                       Change
+//                     </button>
+//                   </div>
+//                 </div>
+//               )}
+
 //               <div>
 //                 <label className="block text-sm font-medium text-gray-700 mb-1">
 //                   Check-in
@@ -713,16 +876,17 @@
 
 //               <button
 //                 onClick={handleBooking}
-//                 disabled={bookingLoading}
-//                 className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50"
+//                 disabled={bookingLoading || !roomType}
+//                 className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
 //               >
 //                 {bookingLoading ? "Booking..." : "Book Now"}
 //               </button>
 
 //               {message && (
 //                 <p
-//                   className={`text-center font-medium ${message.includes("✅") ? "text-green-600" : "text-red-600"
-//                     }`}
+//                   className={`text-center font-medium ${
+//                     message.includes("✅") ? "text-green-600" : "text-red-600"
+//                   }`}
 //                 >
 //                   {message}
 //                 </p>
@@ -739,12 +903,20 @@
 //         onClose={() => setShowRatingModal(false)}
 //         onSubmit={handleRatingSubmitted}
 //       />
+
+//       {/* Room Selection Modal */}
+//       <RoomSelectionModal
+//         rooms={rooms}
+//         isOpen={showRoomModal}
+//         onClose={() => setShowRoomModal(false)}
+//         onSelectRoom={handleRoomSelect}
+//         selectedRoomType={roomType}
+//       />
 //     </div>
 //   );
 // };
 
-// export default FarmhouseDetail;
-
+// export default FarmhouseDetail; 
 
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -1001,7 +1173,7 @@ const ImageSlider = ({ images, farmhouseName }) => {
               onClick={closeModal}
               className="absolute top-4 right-4 text-white text-2xl z-10 bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-70"
             >
-              ✕
+              X
             </button>
 
             {/* Navigation Arrows */}
@@ -1072,17 +1244,17 @@ const RoomSelectionModal = ({
   isOpen, 
   onClose, 
   onSelectRoom, 
-  selectedRoomType 
+  selectedRoomIndex 
 }) => {
-  const [tempSelectedRoom, setTempSelectedRoom] = useState(selectedRoomType);
+  const [tempSelectedIndex, setTempSelectedIndex] = useState(selectedRoomIndex);
 
   const handleConfirmSelection = () => {
-    onSelectRoom(tempSelectedRoom);
+    onSelectRoom(tempSelectedIndex);
     onClose();
   };
 
   const handleClose = () => {
-    setTempSelectedRoom(selectedRoomType); // Reset to original selection
+    setTempSelectedIndex(selectedRoomIndex); // Reset to original selection
     onClose();
   };
 
@@ -1104,10 +1276,10 @@ const RoomSelectionModal = ({
         <div className="space-y-4">
           {rooms.map((room, index) => (
             <div
-              key={index}
-              onClick={() => setTempSelectedRoom(room.type)}
+              key={room._id || index}
+              onClick={() => setTempSelectedIndex(index)}
               className={`border rounded-lg p-4 cursor-pointer transition-all ${
-                tempSelectedRoom === room.type
+                tempSelectedIndex === index
                   ? "border-green-500 bg-green-50 ring-2 ring-green-200"
                   : "border-gray-200 hover:border-green-300"
               }`}
@@ -1118,7 +1290,7 @@ const RoomSelectionModal = ({
                     <h3 className="text-lg font-semibold text-gray-900">
                       {room.name}
                     </h3>
-                    {tempSelectedRoom === room.type && (
+                    {tempSelectedIndex === index && (
                       <FaCheckCircle className="h-5 w-5 text-green-500" />
                     )}
                   </div>
@@ -1150,7 +1322,7 @@ const RoomSelectionModal = ({
           </button>
           <button
             onClick={handleConfirmSelection}
-            disabled={!tempSelectedRoom}
+            disabled={tempSelectedIndex === null}
             className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed font-medium transition-colors"
           >
             Confirm Selection
@@ -1170,7 +1342,7 @@ const FarmhouseDetail = () => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [guests, setGuests] = useState(1);
-  const [roomType, setRoomType] = useState("");
+  const [selectedRoomIndex, setSelectedRoomIndex] = useState(null); // ← FIXED: Use index
   const [specialRequests, setSpecialRequests] = useState("");
   const [message, setMessage] = useState("");
   const [showRatingModal, setShowRatingModal] = useState(false);
@@ -1196,27 +1368,27 @@ const FarmhouseDetail = () => {
     }
   }, [id]);
 
-  // 📦 Fetch farmhouse by ID
+  // Fetch farmhouse by ID
   useEffect(() => {
     if (id) dispatch(fetchFarmhouseById(id));
   }, [dispatch, id]);
 
-  // 📦 Fetch user bookings when component mounts
+  // Fetch user bookings
   useEffect(() => {
     dispatch(fetchUserBookings());
   }, [dispatch]);
 
-  // Filter user's completed bookings for this specific farmhouse
+  // Filter user's completed bookings for this farmhouse
   useEffect(() => {
     const completedBookings = bookings.filter(booking =>
       booking.farmhouse?._id === id &&
       booking.status === 'completed' &&
-      !booking.review?.rating // Only show bookings that haven't been rated yet
+      !booking.review?.rating
     );
     setUserCompletedBookings(completedBookings);
   }, [bookings, id]);
 
-  // 🏠 Default fallback amenities
+  // Default fallback amenities
   const defaultAmenities = [
     { name: "Free Wi-Fi", icon: <FaWifi /> },
     { name: "Swimming Pool", icon: <FaSwimmingPool /> },
@@ -1226,14 +1398,14 @@ const FarmhouseDetail = () => {
     { name: "BBQ Area", icon: <FaFire /> },
   ];
 
-  // 🏠 Default room options
+  // Default room options
   const defaultRooms = [
     { name: "Standard Room", type: "standard", capacity: 2, pricePerNight: 2500 },
     { name: "Deluxe Room", type: "deluxe", capacity: 4, pricePerNight: 4000 },
     { name: "Family Suite", type: "suite", capacity: 6, pricePerNight: 6000 },
   ];
 
-  // ✅ Check if a date is blocked
+  // Check if a date is blocked
   const isDateBlocked = (date) => {
     return blockedDates.some(blockedDate => {
       const blocked = new Date(blockedDate);
@@ -1242,25 +1414,24 @@ const FarmhouseDetail = () => {
     });
   };
 
-  // 🎯 Handle room selection from modal
-  const handleRoomSelect = (selectedRoomType) => {
-    setRoomType(selectedRoomType);
-    console.log('Selected room:', selectedRoomType);
+  // Handle room selection from modal
+  const handleRoomSelect = (index) => {
+    setSelectedRoomIndex(index);
   };
 
-  // 🧾 Booking Submission
+  // Booking Submission
   const handleBooking = async () => {
     if (!checkIn || !checkOut) {
-      setMessage("❌ Please select check-in and check-out dates.");
+      setMessage("Please select check-in and check-out dates.");
       return;
     }
 
-    if (!roomType) {
-      setMessage("❌ Please select a room type.");
+    if (selectedRoomIndex === null) {
+      setMessage("Please select a room type.");
       return;
     }
 
-    // ✅ Check for blocked dates
+    // Check for blocked dates
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
     const datesInRange = [];
@@ -1273,13 +1444,15 @@ const FarmhouseDetail = () => {
 
     const hasBlockedDate = datesInRange.some(date => isDateBlocked(date));
     if (hasBlockedDate) {
-      setMessage("❌ Selected dates include blocked dates. Please choose different dates.");
+      setMessage("Selected dates include blocked dates. Please choose different dates.");
       return;
     }
 
+    const selectedRoom = rooms[selectedRoomIndex];
+
     const bookingData = {
       farmhouseId: id,
-      roomType,
+      roomType: selectedRoom.type, // ← Send type to backend
       checkIn,
       checkOut,
       guests: { adults: guests, children: 0 },
@@ -1295,16 +1468,16 @@ const FarmhouseDetail = () => {
 
     try {
       await dispatch(createBooking(bookingData)).unwrap();
-      setMessage("✅ Booking successful!");
+      setMessage("Booking successful!");
       // Reset form
       setCheckIn("");
       setCheckOut("");
       setGuests(1);
-      setRoomType("");
+      setSelectedRoomIndex(null);
       setSpecialRequests("");
     } catch (err) {
       console.error('Booking error:', err);
-      setMessage(`❌ ${err}`);
+      setMessage(`${err}`);
     }
   };
 
@@ -1314,7 +1487,6 @@ const FarmhouseDetail = () => {
   };
 
   const handleRatingSubmitted = () => {
-    // Refresh bookings to reflect the new rating
     dispatch(fetchUserBookings());
   };
 
@@ -1326,7 +1498,7 @@ const FarmhouseDetail = () => {
     ));
   };
 
-  // ⏳ Loading
+  // Loading
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -1335,7 +1507,7 @@ const FarmhouseDetail = () => {
     );
   }
 
-  // ❌ Not Found
+  // Not Found
   if (!currentFarmhouse) {
     return (
       <div className="min-h-screen flex items-center justify-center text-center">
@@ -1345,7 +1517,7 @@ const FarmhouseDetail = () => {
     );
   }
 
-  // 📸 Images
+  // Images
   const images = currentFarmhouse.images?.length
     ? currentFarmhouse.images
     : [{ url: "/placeholder.jpg" }];
@@ -1358,16 +1530,16 @@ const FarmhouseDetail = () => {
     ? currentFarmhouse.rooms
     : defaultRooms;
 
-  // ✅ MOVED: Get selected room details - now placed AFTER rooms is defined
-  const selectedRoom = rooms.find(room => room.type === roomType);
+  // Selected room by index
+  const selectedRoom = selectedRoomIndex !== null ? rooms[selectedRoomIndex] : null;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* 🖼️ Image Slider */}
+        {/* Image Slider */}
         <ImageSlider images={images} farmhouseName={currentFarmhouse.name} />
 
-        {/* 🏡 Details */}
+        {/* Details */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
             {/* Farmhouse Info */}
@@ -1395,7 +1567,7 @@ const FarmhouseDetail = () => {
               </p>
             </div>
 
-            {/* User's Completed Bookings Section */}
+            {/* User's Completed Bookings */}
             {userCompletedBookings.length > 0 && (
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -1474,16 +1646,16 @@ const FarmhouseDetail = () => {
                 </button>
               </div>
               
-              {roomType ? (
+              {selectedRoom ? (
                 <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="text-lg font-semibold text-green-800">
-                        Selected Room: {selectedRoom?.name}
+                        Selected Room: {selectedRoom.name}
                       </h3>
                       <p className="text-green-600">
-                        Capacity: {selectedRoom?.capacity} guests • 
-                        ₹{selectedRoom?.pricePerNight?.toLocaleString()} per night
+                        Capacity: {selectedRoom.capacity} guests • 
+                        ₹{selectedRoom.pricePerNight?.toLocaleString()} per night
                       </p>
                     </div>
                     <button
@@ -1501,11 +1673,14 @@ const FarmhouseDetail = () => {
               <div className="space-y-4">
                 {rooms.map((room, index) => (
                   <div
-                    key={index}
-                    onClick={() => setRoomType(room.type)}
+                    key={room._id || `${room.type}-${index}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedRoomIndex(index);
+                    }}
                     className={`border rounded-lg p-4 cursor-pointer transition ${
-                      roomType === room.type
-                        ? "border-green-500 bg-green-50"
+                      selectedRoomIndex === index
+                        ? "border-green-500 bg-green-50 ring-2 ring-green-200"
                         : "border-gray-200 hover:border-green-300"
                     }`}
                   >
@@ -1530,7 +1705,7 @@ const FarmhouseDetail = () => {
             </div>
           </div>
 
-          {/* 💳 Booking Card */}
+          {/* Booking Card */}
           <div className="bg-white p-6 rounded-lg shadow-sm h-fit sticky top-8">
             <div className="text-center mb-6">
               <div className="text-3xl font-bold text-green-600">
@@ -1545,15 +1720,15 @@ const FarmhouseDetail = () => {
 
             <div className="space-y-4">
               {/* Selected Room Display */}
-              {roomType && (
+              {selectedRoom && (
                 <div className="bg-green-50 border border-green-200 rounded-lg p-3">
                   <div className="flex justify-between items-center">
                     <div>
                       <p className="font-semibold text-green-800 text-sm">
-                        {selectedRoom?.name}
+                        {selectedRoom.name}
                       </p>
                       <p className="text-green-600 text-xs">
-                        {selectedRoom?.capacity} guests
+                        {selectedRoom.capacity} guests
                       </p>
                     </div>
                     <button
@@ -1578,7 +1753,7 @@ const FarmhouseDetail = () => {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
                 />
                 {checkIn && isDateBlocked(checkIn) && (
-                  <p className="text-red-600 text-sm mt-1">❌ This date is blocked</p>
+                  <p className="text-red-600 text-sm mt-1">This date is blocked</p>
                 )}
               </div>
 
@@ -1594,7 +1769,7 @@ const FarmhouseDetail = () => {
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500"
                 />
                 {checkOut && isDateBlocked(checkOut) && (
-                  <p className="text-red-600 text-sm mt-1">❌ This date is blocked</p>
+                  <p className="text-red-600 text-sm mt-1">This date is blocked</p>
                 )}
               </div>
 
@@ -1624,7 +1799,7 @@ const FarmhouseDetail = () => {
 
               <button
                 onClick={handleBooking}
-                disabled={bookingLoading || !roomType}
+                disabled={bookingLoading || selectedRoomIndex === null}
                 className="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {bookingLoading ? "Booking..." : "Book Now"}
@@ -1633,7 +1808,7 @@ const FarmhouseDetail = () => {
               {message && (
                 <p
                   className={`text-center font-medium ${
-                    message.includes("✅") ? "text-green-600" : "text-red-600"
+                    message.includes("Booking successful") ? "text-green-600" : "text-red-600"
                   }`}
                 >
                   {message}
@@ -1658,7 +1833,7 @@ const FarmhouseDetail = () => {
         isOpen={showRoomModal}
         onClose={() => setShowRoomModal(false)}
         onSelectRoom={handleRoomSelect}
-        selectedRoomType={roomType}
+        selectedRoomIndex={selectedRoomIndex}
       />
     </div>
   );

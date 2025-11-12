@@ -75,11 +75,11 @@ const Navbar = () => {
                   </Link>
                 )}
                 {/* Additional role-specific links */}
-                {user?.role === 'admin' && (
+                {/* {user?.role === 'admin' && (
                   <Link to="/admin" className="text-gray-700 hover:text-green-600 transition-colors">
                     Admin Panel
                   </Link>
-                )}
+                )} */}
                 {user?.role === 'owner' && (
                   <Link to="/owner/farmhouses" className="text-gray-700 hover:text-green-600 transition-colors">
                     My Farmhouses

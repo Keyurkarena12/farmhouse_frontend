@@ -61,7 +61,7 @@ const Login = () => {
             </Link>
           </p>
         </div>
-        
+
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
@@ -85,7 +85,7 @@ const Login = () => {
                 />
               </div>
             </div>
-            
+
             <div>
               <label htmlFor="password" className="sr-only">
                 Password
@@ -136,9 +136,9 @@ const Login = () => {
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-green-600 hover:text-green-500">
+              <Link to="/forgot-password" className="font-medium text-green-600 hover:text-green-500">
                 Forgot your password?
-              </a>
+              </Link>
             </div>
           </div>
 

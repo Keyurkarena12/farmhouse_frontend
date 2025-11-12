@@ -569,192 +569,198 @@ const OwnerFarmhouses = () => {
         </div>
       )}
 
-      {/* {!loading && farmhouses?.length > 0 && (
-        <div className="overflow-x-auto shadow-md rounded-lg bg-white">
-          <div className="p-4 bg-green-50 border-b">
-            <p className="text-green-700 font-medium">
-              📊 Showing your {farmhouses.length} farmhouse{farmhouses.length > 1 ? 's' : ''}
-            </p>
+
+     {!loading && farmhouses?.length > 0 && (
+  <div className="bg-white rounded-lg shadow-md">
+
+    {/* Header badge */}
+    <div className="p-4 bg-green-50 border-b">
+      <p className="text-green-700 font-medium">
+        Showing your {farmhouses.length} farmhouse{farmhouses.length > 1 ? 's' : ''}
+      </p>
+    </div>
+
+    {/* ==================== DESKTOP TABLE (≥768px) ==================== */}
+    <div className="hidden md:block overflow-x-auto">
+      <table className="min-w-full border border-gray-200">
+        <thead className="bg-gray-100 border-b">
+          <tr>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Images</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">City</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">State</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Price</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Rooms</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Approval Status</th>
+            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {farmhouses.map((farmhouse) => (
+            <tr key={farmhouse._id} className="border-b hover:bg-gray-50 transition">
+              {/* Images */}
+              <td className="px-4 py-3">
+                <div className="flex space-x-1">
+                  {farmhouse.images?.slice(0, 3).map((img, index) => (
+                    <img
+                      key={index}
+                      src={img.url}
+                      alt={img.alt}
+                      className="w-16 h-12 object-cover rounded-md border"
+                    />
+                  ))}
+                  {farmhouse.images?.length > 3 && (
+                    <div className="w-16 h-12 bg-gray-200 rounded-md flex items-center justify-center text-xs text-gray-600">
+                      +{farmhouse.images.length - 3}
+                    </div>
+                  )}
+                </div>
+              </td>
+
+              {/* Other columns */}
+              <td className="px-4 py-3 font-medium text-gray-800">{farmhouse.name}</td>
+              <td className="px-4 py-3 text-gray-600">{farmhouse.address?.city || "N/A"}</td>
+              <td className="px-4 py-3 text-gray-600">{farmhouse.address?.state || "N/A"}</td>
+              <td className="px-4 py-3 text-gray-600">₹{farmhouse.pricing?.basePrice || 0}</td>
+              <td className="px-4 py-3 text-gray-600">{farmhouse.rooms?.length || 0} types</td>
+
+              {/* Approval Status with Tooltip */}
+              <td className="px-4 py-3">
+                <div className="relative group inline-block">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      farmhouse.approvalStatus === 'approved'
+                        ? 'bg-green-100 text-green-800 border border-green-200'
+                        : farmhouse.approvalStatus === 'rejected'
+                        ? 'bg-red-100 text-red-800 border border-red-200 cursor-help'
+                        : 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+                    }`}
+                  >
+                    {farmhouse.approvalStatus === 'approved' && 'Approved'}
+                    {farmhouse.approvalStatus === 'rejected' && 'Rejected'}
+                    {farmhouse.approvalStatus === 'pending' && 'Pending'}
+                  </span>
+
+                  {/* Reject Reason Tooltip */}
+                  {farmhouse.approvalStatus === 'rejected' && farmhouse.approvalDetails?.rejectionReason && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-2 bg-red-600 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-normal text-center pointer-events-none">
+                      <div className="font-semibold mb-1">Rejection Reason:</div>
+                      <div>{farmhouse.approvalDetails.rejectionReason}</div>
+                      {farmhouse.approvalDetails?.notes && (
+                        <div className="mt-1 border-t border-red-400 pt-1 text-red-100">
+                          <strong>Note:</strong> {farmhouse.approvalDetails.notes}
+                        </div>
+                      )}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-red-600"></div>
+                    </div>
+                  )}
+
+                  {/* Pending Tooltip */}
+                  {farmhouse.approvalStatus === 'pending' && (
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 bg-yellow-600 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 pointer-events-none">
+                      Waiting for admin approval
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-yellow-600"></div>
+                    </div>
+                  )}
+                </div>
+              </td>
+
+              {/* Actions */}
+              <td className="px-4 py-3">
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => openModal(farmhouse)}
+                    className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDelete(farmhouse._id)}
+                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* ==================== MOBILE CARD VIEW (<768px) ==================== */}
+    <div className="block md:hidden">
+      {farmhouses.map((farmhouse) => (
+        <div key={farmhouse._id} className="border-b p-4 hover:bg-gray-50 transition">
+          {/* Images – horizontal scroll */}
+          <div className="flex space-x-2 mb-3 overflow-x-auto pb-1">
+            {farmhouse.images?.slice(0, 5).map((img, i) => (
+              <img
+                key={i}
+                src={img.url}
+                alt={img.alt}
+                className="w-20 h-16 object-cover rounded-md border flex-shrink-0"
+              />
+            ))}
+            {farmhouse.images?.length > 5 && (
+              <div className="w-20 h-16 bg-gray-200 rounded-md flex items-center justify-center text-xs text-gray-600 flex-shrink-0">
+                +{farmhouse.images.length - 5}
+              </div>
+            )}
           </div>
-          <table className="min-w-full border border-gray-200">
-            <thead className="bg-gray-100 border-b">
-              <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Images</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">City</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">State</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Price</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Rooms</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Status</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {farmhouses.map((farmhouse) => (
-                <tr key={farmhouse._id} className="border-b hover:bg-gray-50 transition">
-                  <td className="px-4 py-3">
-                    <div className="flex space-x-1">
-                      {farmhouse.images?.slice(0, 3).map((img, index) => (
-                        <img
-                          key={index}
-                          src={img.url}
-                          alt={img.alt}
-                          className="w-16 h-12 object-cover rounded-md border"
-                        />
-                      ))}
-                      {farmhouse.images?.length > 3 && (
-                        <div className="w-16 h-12 bg-gray-200 rounded-md flex items-center justify-center text-xs text-gray-600">
-                          +{farmhouse.images.length - 3}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 font-medium text-gray-800">{farmhouse.name}</td>
-                  <td className="px-4 py-3 text-gray-600">{farmhouse.address?.city || "N/A"}</td>
-                  <td className="px-4 py-3 text-gray-600">{farmhouse.address?.state || "N/A"}</td>
-                  <td className="px-4 py-3 text-gray-600">₹{farmhouse.pricing?.basePrice || 0}</td>
-                  <td className="px-4 py-3 text-gray-600">{farmhouse.rooms?.length || 0} types</td>
-                  <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded-full text-xs ${farmhouse.isActive
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-red-100 text-red-800'
-                      }`}>
-                      {farmhouse.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={(e) => {
-                          console.log('✏️ Edit button clicked for farmhouse:', farmhouse);
-                          console.log('🔍 Farmhouse owner:', farmhouse.owner);
-                          console.log('👤 Current user:', user);
-                          openModal(farmhouse);
-                        }}
-                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(farmhouse._id)}
-                        className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )} */}
-      {!loading && farmhouses?.length > 0 && (
-        <div className="overflow-x-auto shadow-md rounded-lg bg-white">
-          <div className="p-4 bg-green-50 border-b">
-            <p className="text-green-700 font-medium">
-              📊 Showing your {farmhouses.length} farmhouse{farmhouses.length > 1 ? 's' : ''}
-            </p>
+
+          {/* Info grid */}
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="font-medium text-gray-800">{farmhouse.name}</div>
+            <div className="text-right">
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  farmhouse.approvalStatus === 'approved'
+                    ? 'bg-green-100 text-green-800'
+                    : farmhouse.approvalStatus === 'rejected'
+                    ? 'bg-red-100 text-red-800'
+                    : 'bg-yellow-100 text-yellow-800'
+                }`}
+              >
+                {farmhouse.approvalStatus === 'approved' && 'Approved'}
+                {farmhouse.approvalStatus === 'rejected' && 'Rejected'}
+                {farmhouse.approvalStatus === 'pending' && 'Pending'}
+              </span>
+            </div>
+
+            <div className="text-gray-600">
+              {farmhouse.address?.city || "N/A"}, {farmhouse.address?.state || "N/A"}
+            </div>
+            <div className="text-gray-600 text-right">
+              ₹{farmhouse.pricing?.basePrice || 0}
+            </div>
+
+            <div className="text-gray-600">
+              {farmhouse.rooms?.length || 0} room type{farmhouse.rooms?.length !== 1 ? "s" : ""}
+            </div>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={() => openModal(farmhouse)}
+                className="px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDelete(farmhouse._id)}
+                className="px-2 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs"
+              >
+                Delete
+              </button>
+            </div>
           </div>
-          <table className="min-w-full border border-gray-200">
-            <thead className="bg-gray-100 border-b">
-              <tr>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Images</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">City</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">State</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Price</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Rooms</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Approval Status</th>
-                <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {farmhouses.map((farmhouse) => (
-                <tr key={farmhouse._id} className="border-b hover:bg-gray-50 transition">
-                  <td className="px-4 py-3">
-                    <div className="flex space-x-1">
-                      {farmhouse.images?.slice(0, 3).map((img, index) => (
-                        <img
-                          key={index}
-                          src={img.url}
-                          alt={img.alt}
-                          className="w-16 h-12 object-cover rounded-md border"
-                        />
-                      ))}
-                      {farmhouse.images?.length > 3 && (
-                        <div className="w-16 h-12 bg-gray-200 rounded-md flex items-center justify-center text-xs text-gray-600">
-                          +{farmhouse.images.length - 3}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 font-medium text-gray-800">{farmhouse.name}</td>
-                  <td className="px-4 py-3 text-gray-600">{farmhouse.address?.city || "N/A"}</td>
-                  <td className="px-4 py-3 text-gray-600">{farmhouse.address?.state || "N/A"}</td>
-                  <td className="px-4 py-3 text-gray-600">₹{farmhouse.pricing?.basePrice || 0}</td>
-                  <td className="px-4 py-3 text-gray-600">{farmhouse.rooms?.length || 0} types</td>
-
-                  {/* ✅ UPDATED: Approval Status with Reject Reason Tooltip */}
-                  <td className="px-4 py-3">
-                    <div className="relative group inline-block">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${farmhouse.approvalStatus === 'approved'
-                          ? 'bg-green-100 text-green-800 border border-green-200'
-                          : farmhouse.approvalStatus === 'rejected'
-                            ? 'bg-red-100 text-red-800 border border-red-200 cursor-help'
-                            : 'bg-yellow-100 text-yellow-800 border border-yellow-200'
-                        }`}>
-                        {farmhouse.approvalStatus === 'approved' && '✅ Approved'}
-                        {farmhouse.approvalStatus === 'rejected' && '❌ Rejected'}
-                        {farmhouse.approvalStatus === 'pending' && '⏳ Pending'}
-                      </span>
-
-                      {/* Reject Reason Tooltip */}
-                      {farmhouse.approvalStatus === 'rejected' && farmhouse.approvalDetails?.rejectionReason && (
-                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-red-600 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-normal w-64 text-center pointer-events-none">
-                          <div className="font-semibold mb-1">Rejection Reason:</div>
-                          <div>{farmhouse.approvalDetails.rejectionReason}</div>
-                          {farmhouse.approvalDetails?.notes && (
-                            <div className="mt-1 text-red-100 border-t border-red-500 pt-1">
-                              <strong>Note:</strong> {farmhouse.approvalDetails.notes}
-                            </div>
-                          )}
-                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-red-600"></div>
-                        </div>
-                      )}
-
-                      {/* Pending Tooltip */}
-                      {farmhouse.approvalStatus === 'pending' && (
-                        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-yellow-600 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity z-50 whitespace-nowrap pointer-events-none">
-                          ⏳ Waiting for admin approval
-                          <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-yellow-600"></div>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-
-                  <td className="px-4 py-3">
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => openModal(farmhouse)}
-                        className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-sm transition-colors"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(farmhouse._id)}
-                        className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-sm transition-colors"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
-      )}
+      ))}
+    </div>
+
+  </div>
+)}
+
+
       {!loading && farmhouses?.length === 0 && (
         <div className="text-center text-gray-500 mt-10 py-8">
           <div className="text-6xl mb-4">🏡</div>

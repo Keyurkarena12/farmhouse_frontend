@@ -25,6 +25,7 @@ import { useEffect } from 'react';
 import { getCurrentUser } from './store/slices/authSlice';
 import OwnerBookings from './pages/owner/OwnerBookings';
 import OwnerReviews from './pages/owner/OwnerReviews';
+import ForgotPassword from './pages/ForgotPassword';
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ function AppContent() {
             <Route path="/farmhouse/:id" element={<FarmhouseDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
 
             {/* User Protected Routes */}
             <Route path="/dashboard" element={

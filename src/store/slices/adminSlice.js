@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const API_URL = 'https://farmhouse-backend.vercel.app/api';
+// const API_URL = 'http://localhost:5000/api';
+
 
 // Async thunks for admin statistics
 export const fetchAdminStatistics = createAsyncThunk(
