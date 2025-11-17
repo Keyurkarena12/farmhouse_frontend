@@ -1,0 +1,103 @@
+.google-login-container {
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.google-button-wrapper {
+  width: 100%;
+  min-height: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ensure Google button styles properly */
+.google-button-wrapper iframe {
+  width: 100% !important;
+  min-height: 44px !important;
+}
+
+/* Loading state */
+.google-button-loading {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #f9fafb;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #e5e7eb;
+  border-top: 2px solid #6b7280;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Fallback button */
+.google-fallback-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: white;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.google-fallback-button:hover {
+  background-color: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.google-fallback-button:focus {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+.google-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Debug info */
+.debug-info {
+  margin-top: 0.5rem;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.75rem;
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+  .google-button-wrapper,
+  .google-button-loading,
+  .google-fallback-button {
+    min-height: 48px;
+  }
+  
+  .google-fallback-button {
+    font-size: 1rem;
+  }
+}

@@ -116,6 +116,22 @@ const initialState = {
   error: null
 };
 
+export const googleLogin = createAsyncThunk(
+  'auth/googleLogin',
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`${API_URL}/auth/google-login`, {
+        token: token
+      });
+
+      localStorage.setItem('token', response.data.token);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Google login failed');
+    }
+  }
+);
+
 // ========================================
 // 🧩 Slice
 // ========================================
@@ -199,6 +215,22 @@ const authSlice = createSlice({
         state.user = action.payload.user || action.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+
+      // Add this to your existing extraReducers
+      .addCase(googleLogin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(googleLogin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isAuthenticated = true;
+      })
+      .addCase(googleLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
