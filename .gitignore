@@ -10,7 +10,13 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
+*.local 
+
+# secret
+.env
+
+echo ".env" >> .gitignore
+echo ".env.local" >> .gitignore
 
 # Editor directories and files
 .vscode/*
