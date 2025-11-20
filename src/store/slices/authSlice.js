@@ -112,7 +112,7 @@ const initialState = {
   user: null,
   token: token,
   isAuthenticated: !!token,
-  loading: false,
+  loading: true,
   error: null
 };
 

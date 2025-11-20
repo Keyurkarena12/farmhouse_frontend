@@ -31,13 +31,33 @@ const queryClient = new QueryClient();
 
 // ✅ Separate component banao jo auth check kare
 function AppContent() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   // ✅ Page refresh par user data fetch karo
+  //   dispatch(getCurrentUser());
+  // }, [dispatch]);
+
+
+ const dispatch = useDispatch();
+  const { loading, user } = useSelector((state) => state.auth);  // ← ye line add karo
 
   useEffect(() => {
-    // ✅ Page refresh par user data fetch karo
-    dispatch(getCurrentUser());
-  }, [dispatch]);
+    // Sirf tab call karo jab token hai lekin user null hai (refresh case)
+    const token = localStorage.getItem('token');
+    if (token && !user) {
+      dispatch(getCurrentUser());
+    }
+  }, [dispatch, user]);
 
+  // ← YE SABSE IMPORTANT HAI
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-2xl font-semibold text-gray-700">Loading...</div>
+      </div>
+    );
+  }
 
 
   return (
