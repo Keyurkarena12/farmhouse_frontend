@@ -171,7 +171,7 @@ const OwnerDashboard = () => {
 
   const fetchBlockedDates = async (farmhouseId) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/bookings/farmhouse/${farmhouseId}/blocked-dates`);
+      const response = await axios.get(`https://farmhouse-backend-clean.vercel.app/api/bookings/farmhouse/${farmhouseId}/blocked-dates`);
       const blockedDatesMap = {};
       response.data.blockedDates.forEach(blocked => {
         const dateString = new Date(blocked.date).toISOString().split('T')[0];
@@ -193,7 +193,7 @@ const OwnerDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/bookings/farmhouse/${selectedFarmhouse}/blocked-dates`,
+        `https://farmhouse-backend-clean.vercel.app/api/bookings/farmhouse/${selectedFarmhouse}/blocked-dates`,
         { dates: [dateString], action },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -218,7 +218,8 @@ const OwnerDashboard = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/bookings/farmhouse/${selectedFarmhouse}/blocked-dates`,
+        // `http://localhost:5000/api/bookings/farmhouse/${selectedFarmhouse}/blocked-dates`,
+        `https://farmhouse-backend-clean.vercel.app/api/bookings/farmhouse/${selectedFarmhouse}/blocked-dates`,
         { dates: datesToUpdate, action },
         { headers: { Authorization: `Bearer ${token}` } }
       );

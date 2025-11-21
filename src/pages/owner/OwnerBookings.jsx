@@ -174,28 +174,6 @@ const OwnerBookings = () => {
                         className="w-20 h-20 object-cover rounded-lg"
                       />
                       <div className="flex-1">
-                        {/* <div className="flex items-start justify-between">
-                          <div>
-                            <h3 className="text-lg font-semibold text-gray-900">
-                              {booking.farmhouse?.name}
-                            </h3>
-                            <p className="text-gray-600 text-sm mt-1">
-                              Booked by: <span className="font-medium">{booking.user?.name}</span>
-                            </p>
-                            <p className="text-gray-600 text-sm">
-                              Email: <span className="font-medium">{booking.user?.email}</span>
-                            </p>
-                            <p className="text-gray-600 text-sm">
-                              Phone: <span className="font-medium">{booking.user?.phone || 'Not provided'}</span>
-                            </p>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className={`px-3 py-1 text-sm font-medium rounded-full border ${getStatusBadgeClass(booking.status)}`}>
-                              {getStatusText(booking.status)}
-                            </span>
-                          </div>
-                        </div> */}
-
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
 
                           <div>
