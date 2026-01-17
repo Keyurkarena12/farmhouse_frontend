@@ -151,6 +151,9 @@ const authSlice = createSlice({
     setUser: (state, action) => {
       state.user = action.payload;
       state.isAuthenticated = true;
+    },
+    setLoadingFalse: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: (builder) => {
