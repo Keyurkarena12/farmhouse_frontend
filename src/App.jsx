@@ -39,14 +39,25 @@ function AppContent() {
   // }, [dispatch]);
 
 
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { loading, user } = useSelector((state) => state.auth);  // ← ye line add karo
 
+  // useEffect(() => {
+  //   // Sirf tab call karo jab token hai lekin user null hai (refresh case)
+  //   const token = localStorage.getItem('token');
+  //   if (token && !user) {
+  //     dispatch(getCurrentUser());
+  //   }
+  // }, [dispatch, user]);
+
   useEffect(() => {
-    // Sirf tab call karo jab token hai lekin user null hai (refresh case)
     const token = localStorage.getItem('token');
+
     if (token && !user) {
       dispatch(getCurrentUser());
+    } else if (!token) {
+      // Token nahi hai → loading ko false kar do warna atak jayega
+      dispatch({ type: 'auth/setLoadingFalse' }); // naya action
     }
   }, [dispatch, user]);
 
