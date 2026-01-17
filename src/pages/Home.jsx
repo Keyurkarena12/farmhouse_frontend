@@ -40,7 +40,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen bg-gradient-to-r from-green-600 to-green-800">
+      <section className="relative min-h-screen pt-20 bg-gradient-to-r from-green-600 to-green-800">
         <div className="absolute inset-0 bg-black opacity-40"></div>
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="text-center text-white px-4 max-w-4xl mx-auto">
